@@ -5,6 +5,12 @@
 using namespace std;
 
 
+void listAllOperations() {
+    cout << "用法:gmanager [选项]..." << endl;
+    cout << "管理服务器集群" << endl << endl;
+    
+}
+
 int main(int argc, char *argv[])
 {
     if(argc == 0) {
