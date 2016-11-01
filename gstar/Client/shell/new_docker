@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd ../shell #到expect脚本目录下
+./new_docker.ep $1 $2 $3 $4 $5 #执行创建容器指令
+./change_ownership.ep $1 $2 $3 $4 #执行修改权限指令
+exit
+

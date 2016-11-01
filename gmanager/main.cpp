@@ -5,13 +5,29 @@
 using namespace std;
 
 
+void wrongUsageWarning() {
+    cout << "用法:gmanager [选项]..." << endl;
+    cout << "一条指令执行一个选项" << endl << endl;
+    cout << "请输入'gmanager -h'或者'gmanager --help'查看详细说明" << endl;
+}
+
+void listAllOperations() {
+    cout << "用法:gmanager [选项]..." << endl;
+    cout << "管理服务器集群" << endl << endl;
+    cout << "长选项必须用的参数在使用短选项时也是必须的" << endl;
+
+}
+
 int main(int argc, char *argv[])
 {
     if(argc == 0) {
         return 0;
     }
+    if(argc >= 2) {
+        wrongUsageWarning();
+        return 0;
+    }
     if(strcmp(argv[0] , "-h") == 0 || strcmp(argv[0] , "--help") == 0) {
-
         listAllOperations();
         return 0;
     }

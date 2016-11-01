@@ -1,0 +1,29 @@
+#!/usr/bin/expect
+set timeout 1
+set servername [lindex $argv 0]
+set password [lindex $argv 1]
+set ipaddress [lindex $argv 2]
+set username [lindex $argv 3]
+
+spawn ssh $servername@$ipaddress
+
+expect {
+	"no)?" {
+		send "yes\r"
+		expect "word:"
+		send "$password\r"
+	}
+	":" {
+		send "$password\r"
+	}
+}
+expect "$"
+send "sudo docker start $username\r"
+
+expect "$servername:"
+send "$password\r"
+
+expect "$"
+send "exit\r"
+
+interact

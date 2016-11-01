@@ -1,0 +1,31 @@
+#!/usr/bin/expect
+set timeout 1
+set servername [lindex $argv 0]
+set password [lindex $argv 1]
+set ipaddress [lindex $argv 2]
+set username [lindex $argv 3]
+set portnum [lindex $argv 4]
+
+spawn ssh $servername@$ipaddress
+
+expect {
+	"no)?" {
+		send "yes\r"
+		expect "word:"
+		send "$password\r"
+	}
+	":" {
+		send "$password\r"
+	}
+}
+
+expect "$" 
+send "sudo docker run -d --name $username -v /home/$servername/$username:/home/ubuntu/Desktop/$username -p $portnum:6080 docker/desktop:10.17\r"
+
+expect "$servername:"
+send "$password\r"
+
+expect "$"
+send "exit\r"
+
+interact

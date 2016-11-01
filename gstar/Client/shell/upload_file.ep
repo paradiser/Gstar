@@ -1,0 +1,22 @@
+#!/usr/bin/expect
+set timeout 6
+
+set sourcefilepath [lindex $argv 0]
+set destname [lindex $argv 1]
+set destipaddress [lindex $argv 2]
+set password [lindex $argv 3]
+set destfilepath [lindex $argv 4]
+spawn ./upload_file_spawn $sourcefilepath $destname $destipaddress $destfilepath
+expect {
+	"no)?" {
+		send "yes\r"
+		expect "word:"
+		send "$password\r"
+	}
+	":" {
+		send "$password\r"
+	}
+}
+
+#log_file result.txt
+interact

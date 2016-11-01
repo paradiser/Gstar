@@ -1,0 +1,40 @@
+#!/usr/bin/expect
+set timeout 3
+
+set servername [lindex $argv 0]
+set password [lindex $argv 1]
+set ipaddress [lindex $argv 2]
+set username [lindex $argv 3]
+set portnum [lindex $argv 4]
+set filename [lindex $argv 5]
+
+spawn ssh -X $servername@$ipaddress
+
+expect {
+	"no)?" {
+		send "yes\r"
+		expect "word:"
+		send "$password\r"
+	}
+	":" {
+		send "$password\r"
+	}
+}
+
+expect "]$"
+send "sudo nvidia-docker run --rm -ti -v /home/$servername/$username:/home/$username -v /etc/localtime:/etc/localtime:ro --net=host -e DISPLAY=:10.0 -v /home/$servername/.Xauthority:/root/.Xauthority --name $username nvidia/cuda:osg\r"
+expect ":"
+send "$password\r"
+expect ":/# "
+send "exite\r"
+expect ":/# "
+send "osgviewer /home/$username/$filename\r"
+expect ":/# "
+send "exit\r"
+
+while {1} {	
+	expect "]$ "
+	send "exit\r"
+	expect "closed" break
+}
+interact

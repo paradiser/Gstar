@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cd ../shell #到expect脚本目录下
+./download_file.ep $1 $2 $3 $4 $5 #执行download_file指令
+exit
+
+

@@ -1,0 +1,21 @@
+#!/usr/bin/expect
+set timeout 6
+set sourcename [lindex $argv 0]
+set sourceipaddress [lindex $argv 1]
+set sourcefilepath [lindex $argv 2]
+set destname [lindex $argv 3]
+set destipaddress [lindex $argv 4]
+set password [lindex $argv 5]
+set destfilepath [lindex $argv 6]
+spawn scp -o ConnectTimeout=5 $sourcename@$sourceipaddress:$sourcefilepath $destname@$destipaddress:$destfilepath
+expect {
+	"no)?" {
+		send "yes\r"
+		expect "word:"
+		send "$password\r"
+	}
+	":" {
+		send "$password\r"
+	}
+}
+interact
