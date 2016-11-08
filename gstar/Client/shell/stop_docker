@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
 cd ../shell #到expect脚本目录下
-./stop_docker.ep $1 $2 $3 $4 #执行停止容器指令
+expect stop_docker.ep $1 $2 $3 $4 #执行停止容器指令
 exit
 

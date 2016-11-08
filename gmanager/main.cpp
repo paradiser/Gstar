@@ -3,8 +3,10 @@
 #include <string.h>
 #include <stdio.h>
 #include <string>
+#include <map>
 using namespace std;
 
+map <string , int> optionMap;
 
 void wrongUsageWarning(int argc , char *argv[]) {
     cout << "gmanager:无效选项 --";
@@ -13,6 +15,16 @@ void wrongUsageWarning(int argc , char *argv[]) {
     }
     cout << endl;
     cout << "请输入'gmanager -h'或者'gmanager --help'查看详细说明." << endl;
+}
+
+void wrongUsageDelete() {
+    cout << "gmanager:无效选项 -- d" << endl;
+    cout << "  -d, --delete\t" << "[ip | id]\t" << "从服务器列表中移除指定的服务器" << endl;
+}
+
+void wrongUsageAppend() {
+    cout << "gmanager:无效选项 -- p" << endl;
+    cout << "  -p, --append\t" << "[ip]     \t" << "添加指定的服务器" << endl;
 }
 
 void listAllOperations() {
@@ -31,9 +43,21 @@ void listAllServerInfo() {
     int servNum = getServerNum();
     cout << "服务器编号" << "\t" << "服务器ip" << "\t" << "当前连接数" << "\t" << "最大连接数" << endl;
     for(int i=1; i<=servNum; i++) {
-        cout << "  " << i << "  \t  " << getServerIp(i) << "  \t  " << getServerConsViaId(i)
-             << "  \t  " << MAX_CONNECTION << endl;
+        printf("%5d\t%5s\t%5d\t%5d\n" , i , getServerIp(i).c_str() , getServerConsViaId(i) , MAX_CONNECTION);
     }
+}
+
+void optionMapInt() {
+    optionMap[string("-d")] = 1;
+    optionMap[string("-delete")] = 1;
+    optionMap[string("-h")] = 2;
+    optionMap[string("-help")] = 2;
+    optionMap[string("-i")] = 3;
+    optionMap[string("-init")] = 3;
+    optionMap[string("-l")] = 4;
+    optionMap[string("-list")] = 4;
+    optionMap[string("-p")] = 5;
+    optionMap[string("-append")] = 5;
 }
 
 //Debug
@@ -46,42 +70,61 @@ void printArgv(int argc , char *argv[]) {
 
 int main(int argc, char *argv[])
 {
-    switch (argc) {
-    case 1:
+    optionMapInt(); //
+    if(argc == 1) {
         //Todo
-        cout << "1 options" << endl;
-        break;
-    case 2:
-        if(strcmp(argv[1] , "-h") == 0 || strcmp(argv[1] , "--help") == 0) {
-            listAllOperations();
-        } else if(strcmp(argv[1] , "-i") == 0 || strcmp(argv[1] , "--init") == 0) {
-            //Todo
-            if(serverInit() == 0) {
-                cout << "初始化服务器列表成功." << endl;
-            } else {
-                cout << "初始化服务器列表失败." << endl;
-            }
-        } else if(strcmp(argv[1] , "-l") == 0 || strcmp(argv[1] , "--list") == 0) {
-            //Todo
-            listAllServerInfo();
+        return 0;
+    }
+    int option;
+    option = optionMap[argv[1]];
+    switch (option) {
+    //delete
+    case 1:
+        if(argc == 2) {
+            wrongUsageDelete();
         } else {
-            wrongUsageWarning(argc , argv);
+            for(int i=2; i<argc; i++) {
+                removeServer(argv[i]);
+            }
         }
         break;
-    case 3:
-        if(strcmp(argv[1] , "-d") == 0 || strcmp(argv[1] , "--delete") == 0) {
-            //Todo
-            printArgv(argc , argv);
-        } else if(strcmp(argv[1] , "-p") == 0 || strcmp(argv[1] , "--append") == 0) {
-            //Todo
-            printArgv(argc , argv);
-        } else {
+    //help
+    case 2:
+        if(argc > 2) {
             wrongUsageWarning(argc , argv);
+        } else {
+            listAllOperations();
+        }
+        break;
+    //init
+    case 3:
+        if(argc > 2) {
+            wrongUsageWarning(argc , argv);
+        } else {
+            serverInit();
+        }
+        break;
+    //list
+    case 4:
+        if(argc > 2) {
+            wrongUsageWarning(argc , argv);
+        } else {
+            listAllServerInfo();
+        }
+        break;
+    //append
+    case 5:
+        if(argc == 2) {
+            wrongUsageAppend();
+        } else {
+            for(int i=2; i<argc; i++) {
+                addServer(argv[i]);
+            }
         }
         break;
     default:
         wrongUsageWarning(argc , argv);
         break;
     }
-    return 1;
+    return 0;
 }

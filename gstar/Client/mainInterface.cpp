@@ -72,7 +72,7 @@ void mainInterface::on_pushButton_2_clicked() {
 //        connect(send_process, SIGNAL(started()), this, SLOT(send_process_started()));
 //        send_process->start();
 
-//    hide();
+    hide();
 
     }
 }
@@ -130,7 +130,7 @@ void mainInterface::send_process_successed(QString servername, QString password,
     }
 #endif
 
-#if 1
+#if 0
     QDateTime n=QDateTime::currentDateTime();
     QDateTime now;
     do{

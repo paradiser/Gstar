@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 cd ../shell #到expect脚本目录下
-./delete_docker.ep $1 $2 $3 $4 #执行打开容器指令
-./new_docker $1 $2 $3 $4 $5
+expect delete_docker.ep $1 $2 $3 $4 #执行打开容器指令
+sh new_docker $1 $2 $3 $4 $5
 exit
 

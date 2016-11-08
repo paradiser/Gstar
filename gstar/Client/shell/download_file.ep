@@ -7,7 +7,7 @@ set sourcefilepath [lindex $argv 2]
 set password [lindex $argv 3]
 set destfilepath [lindex $argv 4]
 
-spawn ./download_file_spawn $sourcename $sourceipaddress $sourcefilepath $destfilepath
+spawn sh download_file_spawn $sourcename $sourceipaddress $sourcefilepath $destfilepath
 
 expect {
 	"no)?" {
